@@ -2,79 +2,98 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Professional Notification Demo</title>
+<title>Professional Subscribe Notification</title>
 <style>
-  /* ===== Body & Container ===== */
+  /* ===== Body ===== */
   body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(135deg, #e0f2fe, #f0fdf4);
     margin: 0;
-    height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
   }
 
-  .container {
+  /* ===== Card ===== */
+  .card {
     background: #fff;
-    padding: 30px 40px;
-    border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 40px 35px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
     text-align: center;
     max-width: 400px;
+    width: 90%;
   }
 
-  h1 {
-    color: #6c5ce7;
+  .card h1 {
+    font-size: 28px;
+    color: #5c6bc0;
     margin-bottom: 12px;
-    font-size: 24px;
   }
 
-  p {
+  .card p {
+    font-size: 16px;
     color: #555;
-    margin-bottom: 25px;
-    font-size: 15px;
+    margin-bottom: 28px;
+    line-height: 1.5;
   }
 
   /* ===== Buttons ===== */
-  button {
-    padding: 12px 20px;
-    margin: 6px;
-    border: none;
-    border-radius: 6px;
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
     transition: 0.3s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: none;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    margin: 6px 4px;
   }
 
-  #notifyBtn {
-    background: #6c5ce7;
+  #subscribeBtn {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: #fff;
   }
-
-  #notifyBtn:hover {
-    background: #5a4bdc;
+  #subscribeBtn:hover {
+    background: linear-gradient(135deg, #5c0fb8, #1f64d6);
   }
 
   #stopBtn {
-    background: #fd79a8;
+    background: #ff6b81;
     color: #fff;
   }
-
   #stopBtn:hover {
-    background: #e75685;
+    background: #e5506e;
+  }
+
+  /* ===== Responsive ===== */
+  @media(max-width: 480px) {
+    .card {
+      padding: 30px 20px;
+    }
+    .card h1 {
+      font-size: 24px;
+    }
+    .card p {
+      font-size: 14px;
+    }
+    .btn {
+      padding: 12px 24px;
+      font-size: 14px;
+    }
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>🔔 Notification Demo</h1>
-  <p>Click below to enable browser notifications. You will receive a new message every 10 seconds!</p>
-  <button id="notifyBtn">Enable Notifications</button>
-  <button id="stopBtn">Stop Notifications</button>
+<div class="card">
+  <h1>🔔 Subscribe Notifications</h1>
+  <p>Click “Subscribe” to receive browser notifications like a professional site. Demo messages will appear every 10 seconds!</p>
+  <button class="btn" id="subscribeBtn">Subscribe</button>
+  <button class="btn" id="stopBtn">Stop</button>
 </div>
 
 <script>
@@ -88,20 +107,24 @@ const messages = [
   "Message from your web app 💌"
 ];
 
-// ===== Start Notification =====
-document.getElementById("notifyBtn").addEventListener("click", () => {
+// ===== Subscribe Button =====
+document.getElementById("subscribeBtn").addEventListener("click", () => {
   if (!("Notification" in window)) {
     alert("Your browser does not support notifications 😢");
-  } else if (Notification.permission === "granted") {
+    return;
+  }
+
+  if (Notification.permission === "granted") {
     startInterval();
   } else if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
       if (permission === "granted") startInterval();
+      else alert("Notification permission denied ❌");
     });
   }
 });
 
-// ===== Stop Notification =====
+// ===== Stop Notifications =====
 document.getElementById("stopBtn").addEventListener("click", () => {
   if (intervalId) {
     clearInterval(intervalId);
