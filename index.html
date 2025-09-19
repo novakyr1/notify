@@ -1,18 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Notification Demo</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Professional Notification Demo</title>
+<style>
+  /* ===== Body & Container ===== */
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #e0f2fe, #f0fdf4);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 400px;
+  }
+
+  h1 {
+    color: #6c5ce7;
+    margin-bottom: 12px;
+    font-size: 24px;
+  }
+
+  p {
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 15px;
+  }
+
+  /* ===== Buttons ===== */
+  button {
+    padding: 12px 20px;
+    margin: 6px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  #notifyBtn {
+    background: #6c5ce7;
+    color: #fff;
+  }
+
+  #notifyBtn:hover {
+    background: #5a4bdc;
+  }
+
+  #stopBtn {
+    background: #fd79a8;
+    color: #fff;
+  }
+
+  #stopBtn:hover {
+    background: #e75685;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>🔔 Notification Demo</h1>
-    <p>Click the button below to enable browser notifications.</p>
-    <button id="notifyBtn">Enable Notifications</button>
-    <button id="stopBtn">Stop Notifications</button>
-  </div>
 
-  <script src="script.js"></script>
+<div class="container">
+  <h1>🔔 Notification Demo</h1>
+  <p>Click below to enable browser notifications. You will receive a new message every 10 seconds!</p>
+  <button id="notifyBtn">Enable Notifications</button>
+  <button id="stopBtn">Stop Notifications</button>
+</div>
+
+<script>
+let intervalId = null;
+const messages = [
+  "hii 𝐴𝑡ℎ𝑎𝑟𝑣˚₊·— ͟͞͞♡",
+  "New surprise for you 💖",
+  "Hello there! 🌸",
+  "Stay awesome! ✨",
+  "Check this out! 🎉",
+  "Message from your web app 💌"
+];
+
+// ===== Start Notification =====
+document.getElementById("notifyBtn").addEventListener("click", () => {
+  if (!("Notification" in window)) {
+    alert("Your browser does not support notifications 😢");
+  } else if (Notification.permission === "granted") {
+    startInterval();
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") startInterval();
+    });
+  }
+});
+
+// ===== Stop Notification =====
+document.getElementById("stopBtn").addEventListener("click", () => {
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+    alert("Notifications stopped ✅");
+  }
+});
+
+// ===== Random Notification Every 10 Sec =====
+function startInterval() {
+  if (intervalId) return; // already running
+  intervalId = setInterval(() => {
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    new Notification(msg, {
+      body: "This is your repeating notification!",
+      icon: "https://cdn-icons-png.flaticon.com/512/565/565547.png"
+    });
+  }, 2500);
+}
+</script>
+
 </body>
 </html>
