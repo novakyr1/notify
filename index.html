@@ -20,13 +20,6 @@
     --border-radius: 20px;
   }
 
-  /* ===== Base Styles ===== */
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
   body {
     margin: 0;
     font-family: "Poppins", Arial, sans-serif;
@@ -40,7 +33,6 @@
     line-height: 1.6;
   }
 
-  /* ===== Card ===== */
   .card {
     background: #fff;
     padding: 40px 35px;
@@ -50,6 +42,7 @@
     max-width: 450px;
     width: 100%;
     transition: var(--transition);
+    animation: fadeIn 0.5s ease;
   }
 
   .card__icon {
@@ -69,10 +62,8 @@
     font-size: 16px;
     color: #555;
     margin-bottom: 28px;
-    line-height: 1.6;
   }
 
-  /* ===== Status Indicator ===== */
   .status {
     display: inline-flex;
     align-items: center;
@@ -82,27 +73,16 @@
     margin-bottom: 20px;
     background-color: #f5f5f5;
   }
-
   .status__indicator {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     margin-right: 8px;
   }
+  .status--inactive .status__indicator { background-color: #bbb; }
+  .status--active .status__indicator { background-color: var(--success-color); }
+  .status--denied .status__indicator { background-color: var(--danger-color); }
 
-  .status--inactive .status__indicator {
-    background-color: #bbb;
-  }
-
-  .status--active .status__indicator {
-    background-color: var(--success-color);
-  }
-
-  .status--denied .status__indicator {
-    background-color: var(--danger-color);
-  }
-
-  /* ===== Buttons ===== */
   .buttons {
     display: flex;
     flex-wrap: wrap;
@@ -125,49 +105,13 @@
     box-shadow: var(--btn-shadow);
     min-width: 140px;
   }
+  .btn:focus { outline: 2px solid #5c6bc0; outline-offset: 2px; }
+  .btn--primary { background: var(--primary-gradient); color: #fff; }
+  .btn--primary:hover { background: var(--primary-gradient-hover); transform: translateY(-2px); }
+  .btn--danger { background: var(--danger-color); color: #fff; }
+  .btn--danger:hover { background: var(--danger-hover); transform: translateY(-2px); }
+  .btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
-  .btn:focus {
-    outline: 2px solid #5c6bc0;
-    outline-offset: 2px;
-  }
-
-  .btn--primary {
-    background: var(--primary-gradient);
-    color: #fff;
-  }
-
-  .btn--primary:hover {
-    background: var(--primary-gradient-hover);
-    transform: translateY(-2px);
-  }
-
-  .btn--danger {
-    background: var(--danger-color);
-    color: #fff;
-  }
-
-  .btn--danger:hover {
-    background: var(--danger-hover);
-    transform: translateY(-2px);
-  }
-
-  .btn--success {
-    background: var(--success-color);
-    color: #fff;
-  }
-
-  .btn--success:hover {
-    background: #43a047;
-    transform: translateY(-2px);
-  }
-
-  .btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  /* ===== Toast Notification ===== */
   .toast {
     position: fixed;
     bottom: 20px;
@@ -182,70 +126,21 @@
     transition: opacity 0.3s, visibility 0.3s;
     z-index: 1000;
   }
+  .toast--visible { opacity: 1; visibility: visible; }
+  .toast--success { background-color: var(--success-color); }
+  .toast--error { background-color: var(--danger-color); }
 
-  .toast--visible {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .toast--success {
-    background-color: var(--success-color);
-  }
-
-  .toast--error {
-    background-color: var(--danger-color);
-  }
-
-  /* ===== Responsive Design ===== */
   @media (max-width: 480px) {
-    .card {
-      padding: 30px 20px;
-    }
-    
-    .card__title {
-      font-size: 24px;
-    }
-    
-    .card__description {
-      font-size: 14px;
-    }
-    
-    .btn {
-      padding: 12px 24px;
-      font-size: 14px;
-      min-width: 120px;
-    }
-    
-    .buttons {
-      flex-direction: column;
-    }
+    .card { padding: 30px 20px; }
+    .card__title { font-size: 24px; }
+    .card__description { font-size: 14px; }
+    .btn { padding: 12px 24px; font-size: 14px; min-width: 120px; }
+    .buttons { flex-direction: column; }
   }
 
-  /* ===== Animation ===== */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
-  }
-
-  .card {
-    animation: fadeIn 0.5s ease;
-  }
-
-  /* ===== Reduced motion support ===== */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-    
-    .card {
-      animation: none;
-    }
-    
-    .btn:hover {
-      transform: none;
-    }
   }
 </style>
 </head>
@@ -263,29 +158,49 @@
   <p class="card__description">Click "Subscribe" to receive browser notifications. Demo messages will appear every 10 seconds. You can stop them anytime.</p>
   
   <div class="buttons">
-    <button class="btn btn--primary" id="subscribeBtn" aria-label="Subscribe to notifications">
-      Subscribe
-    </button>
-    <button class="btn btn--danger" id="stopBtn" disabled aria-label="Stop notifications">
-      Stop
-    </button>
+    <button class="btn btn--primary" id="subscribeBtn">Subscribe</button>
+    <button class="btn btn--danger" id="stopBtn" disabled>Stop</button>
   </div>
 </div>
 
-<div id="toast" class="toast" aria-live="polite"></div>
+<div id="toast" class="toast"></div>
 
 <script>
-// ===== Global Variables =====
 let intervalId = null;
 let notificationCount = 0;
-const MAX_NOTIFICATIONS = 20; // Safety limit
+const MAX_NOTIFICATIONS = 50;
+
+// ===== Random Messages =====
 const messages = [
   "Hello there! 🌸",
   "Stay awesome! ✨",
   "Check this out! 🎉",
   "New surprise for you 💖",
   "Message from your web app 💌",
-  "Hope you're having a great day! 🌟"
+  "Hope you're having a great day! 🌟",
+  "Atharv, you’ve got this! 🚀",
+  "Good vibes only 🌈",
+  "You’re amazing 💎",
+  "Fresh notification just for you 📰",
+  "Keep shining bright like the stars ✨",
+  "Little things matter the most 🌱",
+  "New ideas are loading... 💡",
+  "Your energy is contagious 🔥",
+  "Never stop believing in yourself 🌠",
+  "Every 10 seconds, a smile for you 😄",
+  "Here’s your dose of positivity ☀️",
+  "Small step today, big change tomorrow 🌍",
+  "Hii 𝐴𝑡ℎ𝑎𝑟𝑣˚₊·— ͟͞͞♡",
+  "Another lovely notification just arrived 📩",
+  "Success is on your way 🌟",
+  "Stay hydrated 💧",
+  "Take a deep breath 🌬️",
+  "Be kind to yourself 💕",
+  "You’re stronger than you think 🦋",
+  "Shining brighter each moment 🌞",
+  "Your presence matters 🌍",
+  "Great things are coming 🔮",
+  "This notification loves you ❤️"
 ];
 
 // ===== DOM Elements =====
@@ -294,37 +209,25 @@ const stopBtn = document.getElementById('stopBtn');
 const statusIndicator = document.getElementById('statusIndicator');
 const toast = document.getElementById('toast');
 
-// ===== Initialize =====
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
-  // Check browser support
-  if (!isNotificationSupported()) {
+  if (!("Notification" in window)) {
     showToast('Your browser does not support notifications', 'error');
     subscribeBtn.disabled = true;
-    updateStatus('inactive', 'Notifications not supported');
+    updateStatus('inactive', 'Not supported');
     return;
   }
-
-  // Check current permission state
   checkPermissionState();
-  
-  // Setup event listeners
   subscribeBtn.addEventListener('click', handleSubscription);
   stopBtn.addEventListener('click', stopNotifications);
 }
 
-// ===== Notification Support Check =====
-function isNotificationSupported() {
-  return 'Notification' in window;
-}
-
-// ===== Permission State Check =====
 function checkPermissionState() {
   if (Notification.permission === 'denied') {
     updateStatus('denied', 'Notifications blocked');
     subscribeBtn.disabled = true;
-    showToast('Notifications are blocked in your browser', 'error');
+    showToast('Blocked in browser', 'error');
   } else if (Notification.permission === 'granted') {
     updateStatus('active', 'Notifications active');
     subscribeBtn.disabled = true;
@@ -332,146 +235,84 @@ function checkPermissionState() {
   }
 }
 
-// ===== Subscription Handler =====
 function handleSubscription() {
   if (Notification.permission === 'granted') {
     startNotifications();
   } else {
-    Notification.requestPermission()
-      .then(permission => {
-        if (permission === 'granted') {
-          startNotifications();
-        } else {
-          updateStatus('denied', 'Notifications denied');
-          subscribeBtn.disabled = false;
-          showToast('Notification permission denied', 'error');
-        }
-      })
-      .catch(error => {
-        console.error('Error requesting notification permission:', error);
-        showToast('Error requesting notifications', 'error');
-      });
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        startNotifications();
+      } else {
+        updateStatus('denied', 'Notifications denied');
+        subscribeBtn.disabled = false;
+        showToast('Permission denied', 'error');
+      }
+    });
   }
 }
 
-// ===== Start Notifications =====
 function startNotifications() {
   if (intervalId) {
-    showToast('Notifications already running', 'error');
+    showToast('Already running', 'error');
     return;
   }
-
   updateStatus('active', 'Notifications active');
   subscribeBtn.disabled = true;
   stopBtn.disabled = false;
   notificationCount = 0;
-  
-  showToast('Notifications started successfully', 'success');
-  
-  // Send immediate notification
+  showToast('Notifications started', 'success');
   showRandomNotification();
-  
-  // Set up interval for subsequent notifications
   intervalId = setInterval(() => {
     if (notificationCount >= MAX_NOTIFICATIONS) {
-      showToast('Maximum notification limit reached', 'error');
+      showToast('Limit reached', 'error');
       stopNotifications();
       return;
     }
-    
     showRandomNotification();
   }, 10000);
 }
 
-// ===== Show Random Notification =====
 function showRandomNotification() {
-  if (notificationCount >= MAX_NOTIFICATIONS) {
-    stopNotifications();
-    return;
-  }
-  
   const message = messages[Math.floor(Math.random() * messages.length)];
   const options = {
-    body: 'This is a demo notification',
-    icon: 'https://cdn-icons-png.flaticon.com/512/565/565547.png',
-    badge: 'https://cdn-icons-png.flaticon.com/512/565/565547.png',
-    tag: 'demo-notification'
+    body: "This is a demo notification",
+    icon: "https://cdn-icons-png.flaticon.com/512/565/565547.png",
+    badge: "https://cdn-icons-png.flaticon.com/512/565/565547.png",
+    tag: "demo"
   };
-  
   try {
     new Notification(message, options);
     notificationCount++;
   } catch (error) {
-    console.error('Error showing notification:', error);
+    console.error(error);
     showToast('Error showing notification', 'error');
   }
 }
 
-// ===== Stop Notifications =====
 function stopNotifications() {
   if (intervalId) {
     clearInterval(intervalId);
     intervalId = null;
   }
-  
   updateStatus('inactive', 'Notifications inactive');
   subscribeBtn.disabled = false;
   stopBtn.disabled = true;
-  
-  showToast('Notifications stopped', 'success');
+  showToast('Stopped', 'success');
 }
 
-// ===== Update Status Indicator =====
 function updateStatus(status, text) {
   statusIndicator.className = 'status';
   statusIndicator.classList.add(`status--${status}`);
   statusIndicator.querySelector('.status__text').textContent = text;
 }
 
-// ===== Toast Notification =====
 function showToast(message, type = '') {
   toast.textContent = message;
   toast.className = 'toast';
-  
-  if (type) {
-    toast.classList.add(`toast--${type}`);
-  }
-  
+  if (type) toast.classList.add(`toast--${type}`);
   toast.classList.add('toast--visible');
-  
-  setTimeout(() => {
-    toast.classList.remove('toast--visible');
-  }, 3000);
-}
-
-// ===== Page Visibility API =====
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden && intervalId) {
-    // Page is hidden, pause notifications
-    clearInterval(intervalId);
-    intervalId = null;
-  } else if (!document.hidden && !intervalId && 
-             Notification.permission === 'granted' && 
-             stopBtn.disabled === false) {
-    // Page is visible again, restart notifications
-    intervalId = setInterval(showRandomNotification, 10000);
-  }
-});
-
-// ===== Service Worker Registration (Optional Enhancement) =====
-// This would be needed for persistent notifications when tab is closed
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => {
-        console.log('SW registered: ', registration);
-      })
-      .catch(registrationError => {
-        console.log('SW registration failed: ', registrationError);
-      });
-  });
+  setTimeout(() => toast.classList.remove('toast--visible'), 3000);
 }
 </script>
-
 </body>
 </html>
